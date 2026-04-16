@@ -1,0 +1,518 @@
+/* ═══ Route Finder Page — Dynamic Edition ═══ */
+
+.route-finder {
+    padding-top: 90px;
+    min-height: 100vh;
+}
+
+.route-header {
+    margin-bottom: var(--space-2xl);
+}
+
+.route-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xs);
+}
+
+.route-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--text-base);
+}
+
+.route-layout {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+}
+
+/* Panel */
+.route-panel {
+    padding: var(--space-xl);
+    position: sticky;
+    top: 90px;
+}
+
+.route-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+/* ═══ Autocomplete Input ═══ */
+.route-location-group {
+    position: relative;
+}
+
+.route-autocomplete-wrap {
+    position: relative;
+}
+
+.route-autocomplete-icon {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
+
+.route-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+}
+
+.route-dot-green {
+    background: var(--safe-green);
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+
+.route-dot-purple {
+    background: var(--accent-purple);
+    box-shadow: 0 0 6px rgba(139, 92, 246, 0.5);
+}
+
+.route-autocomplete-input {
+    padding-left: 2.4rem !important;
+    padding-right: 2.2rem !important;
+}
+
+.route-input-selected {
+    border-color: rgba(139, 92, 246, 0.3) !important;
+    background: rgba(139, 92, 246, 0.04) !important;
+}
+
+.route-autocomplete-spinner {
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-subtle);
+    border-top-color: var(--accent-purple);
+    border-radius: 50%;
+    animation: rotate-slow 0.7s linear infinite;
+}
+
+.route-autocomplete-clear {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: none;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all var(--transition-fast);
+}
+
+.route-autocomplete-clear:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
+}
+
+.route-autocomplete-coords {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    padding-left: 2px;
+}
+
+.route-autocomplete-coords svg {
+    font-size: 0.6rem;
+    color: var(--accent-purple);
+}
+
+/* Dropdown */
+.route-autocomplete-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    padding: var(--space-xs);
+    z-index: 600;
+    max-height: 260px;
+    overflow-y: auto;
+    animation: fadeInUp 0.2s ease;
+}
+
+.route-autocomplete-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    background: none;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    font-size: var(--text-sm);
+    transition: background var(--transition-fast);
+}
+
+.route-autocomplete-item:hover {
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.route-autocomplete-item-icon {
+    color: var(--accent-purple);
+    flex-shrink: 0;
+    font-size: 0.85rem;
+}
+
+.route-autocomplete-item-name {
+    line-height: 1.35;
+}
+
+/* Swap Button */
+.route-swap-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: -4px auto;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all var(--transition-fast);
+    z-index: 1;
+    position: relative;
+}
+
+.route-swap-btn:hover {
+    background: var(--accent-purple-glow);
+    border-color: rgba(139, 92, 246, 0.3);
+    color: var(--accent-purple);
+    transform: rotate(180deg);
+}
+
+/* Search Button */
+.route-search-btn {
+    width: 100%;
+    margin-top: var(--space-sm);
+}
+
+.route-search-btn.searching {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: rotate-slow 0.8s linear infinite;
+}
+
+/* Results */
+.route-results {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.route-results-title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-md);
+}
+
+.route-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.route-option {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    color: var(--text-primary);
+}
+
+.route-option:hover {
+    border-color: var(--border-medium);
+    background: var(--bg-card-hover);
+}
+
+.route-option-active.route-option-safe {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.route-option-active.route-option-short {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.05);
+}
+
+.route-option-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 0.2rem 0.6rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-sm);
+    letter-spacing: 0.08em;
+}
+
+.route-option h4 {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+
+.route-option-stats {
+    display: flex;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-sm);
+}
+
+.route-option-stat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.route-option-score {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+}
+
+.route-score-value {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 800;
+}
+
+.route-score-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.route-comparison {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: var(--safe-green-glow);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--safe-green);
+}
+
+/* Cabs */
+.route-cabs {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.route-cabs-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.route-cabs-header h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--danger-red);
+}
+
+.route-cabs-header p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.route-cabs-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.route-cab-card {
+    padding: var(--space-lg);
+}
+
+.route-cab-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+}
+
+.route-cab-info h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+.route-cab-meta {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.route-cab-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.route-cab-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.route-cab-feature {
+    font-size: var(--text-xs);
+    color: var(--safe-green);
+}
+
+.route-cab-call {
+    width: 100%;
+}
+
+/* Map */
+.route-map-wrap {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    position: sticky;
+    top: 90px;
+}
+
+.route-map {
+    height: calc(100vh - 140px);
+    width: 100%;
+}
+
+/* Route Markers */
+.route-marker-start,
+.route-marker-end {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: var(--text-sm);
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.route-marker-start {
+    background: var(--gradient-green);
+}
+
+.route-marker-end {
+    background: var(--gradient-purple);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+/* Error State */
+.route-error {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--danger-red);
+    font-size: var(--text-sm);
+}
+
+/* Route Info Bar */
+.route-info-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.route-info-bar strong {
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .route-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .route-panel {
+        position: static;
+    }
+
+    .route-map-wrap {
+        position: static;
+    }
+
+    .route-map {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .route-finder {
+        padding-top: 75px;
+    }
+
+    .route-title {
+        font-size: var(--text-2xl);
+    }
+}

@@ -1,0 +1,201 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0.75rem 0;
+    transition: all var(--transition-base);
+    background: transparent;
+}
+
+.navbar-scrolled {
+    background: var(--bg-glass-strong);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+}
+
+.navbar-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+}
+
+/* Brand */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.navbar-logo {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-purple);
+    border-radius: var(--radius-md);
+}
+
+.navbar-logo-icon {
+    font-size: 1.15rem;
+    color: white;
+    z-index: 1;
+}
+
+.navbar-logo-pulse {
+    position: absolute;
+    inset: -3px;
+    border-radius: var(--radius-md);
+    background: var(--gradient-purple);
+    opacity: 0;
+    animation: logo-pulse 3s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: scale(1.15);
+    }
+}
+
+.navbar-name {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.navbar-name-accent {
+    background: var(--gradient-green);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Links */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.navbar-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+}
+
+.navbar-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.navbar-link-active {
+    color: var(--text-primary);
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.navbar-link-icon {
+    font-size: 1rem;
+    display: flex;
+}
+
+.navbar-link-indicator {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--accent-purple);
+    border-radius: var(--radius-full);
+}
+
+/* Mobile */
+.navbar-mobile-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 1.25rem;
+}
+
+.navbar-mobile-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .navbar-mobile-toggle {
+        display: flex;
+    }
+
+    .navbar-links {
+        position: fixed;
+        top: 72px;
+        right: -100%;
+        width: 260px;
+        height: calc(100vh - 72px);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        padding: var(--space-md);
+        background: var(--bg-glass-strong);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border-left: 1px solid var(--border-subtle);
+        transition: right var(--transition-slow);
+        z-index: 999;
+    }
+
+    .navbar-links-open {
+        right: 0;
+    }
+
+    .navbar-mobile-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        top: 72px;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+    }
+
+    .navbar-link {
+        padding: 0.75rem 1rem;
+    }
+
+    .navbar-link-indicator {
+        display: none;
+    }
+}
